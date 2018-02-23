@@ -14,11 +14,11 @@ dependencies {
 	compile 'com.sun.jersey:jersey-client:1.19.3'
 	compile 'com.sun.jersey:jersey-servlet:1.19.3'
 	compile 'com.sun.jersey:jersey-json:1.19.3'
-	
-	compile 'com.yammer.metrics:metrics-core:2.2.0'
-	compile 'com.yammer.metrics:metrics-servlet:2.2.0'
-	compile 'com.yammer.metrics:metrics-jersey:2.2.0'
-	compile 'com.yammer.metrics:metrics-graphite:2.2.0'
+
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+	compile 'com.mashape.unirest:unirest-java:1.4.9'
+
+	compile 'org.mongodb:mongo-java-driver:2.10.1'
 	
 	compile 'log4j:log4j:1.2.16'
 
