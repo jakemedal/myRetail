@@ -1,6 +1,5 @@
 package com.myRetail.mapper;
 
-
 import static javax.ws.rs.core.Response.Status.*;
 
 import javax.ws.rs.core.MediaType;

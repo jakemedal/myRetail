@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response.Status;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myRetail.domain.ProductResponseDTO;
 import com.myRetail.service.ProductService;
@@ -39,13 +40,26 @@ public class ProductResource {
 	@Path("/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateProductPrice(@PathParam("productId") String productId,
-									   String payload) {
+									   String payload) throws IOException {
 		LOG.info("HTTP PUT /products test- productId=" + productId + " payload=" + payload);
 
-		//TODO: Verify id in path matches id in payload
-
+		verifyRequest(productId, payload);
 		service.putProductPrice(payload);
+
 		return status(CREATED).build();
+	}
+
+	private void verifyRequest(String productId, String payload) throws IOException {
+		if (!getId(payload).equals(productId)) {
+			throw new IllegalArgumentException("ID provided as path parameter does not match the ID in the payload\n\n" +
+					"PathParam: " + productId +
+					"Payload: " + getId(payload));
+		}
+	}
+
+	private String getId(String payload) throws IOException {
+		JsonNode json =  new ObjectMapper().readTree(payload);
+		return json.get("id").asText();
 	}
 
 }
