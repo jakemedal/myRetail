@@ -32,7 +32,7 @@ public class ProductDAO {
     public void saveProductPrices(ProductPriceDTO productPriceDTO) {
         DBObject product = new BasicDBObject("_id", productPriceDTO.getId())
                                      .append("current_price", new BasicDBObject("value", productPriceDTO.getPrice().getValue())
-                                                                            .append("currency_code", productPriceDTO.getPrice().getCurrency()));
+                                             .append("currency_code", productPriceDTO.getPrice().getCurrency()));
         products.save(product);
     }
 

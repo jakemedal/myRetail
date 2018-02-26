@@ -4,7 +4,9 @@ import java.net.UnknownHostException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.util.JSON;
 import org.apache.log4j.Logger;
 
 public class MongoDBUtility {
@@ -16,7 +18,6 @@ public class MongoDBUtility {
     private static final int MONGO_PORT = 27017;
     private static final String DB_NAME = "myRetail";
     private static final String COLLECTION_NAME = "products";
-
     private static DB productDatabase;
 
     private MongoDBUtility() {
@@ -31,7 +32,11 @@ public class MongoDBUtility {
     }
 
     public void cleanUp() throws UnknownHostException {
-        LOG.info("Cleaning up MongoDB database...");
         productDatabase.getCollection(COLLECTION_NAME).remove(new BasicDBObject());
+    }
+
+    public void loadSampleTestData(String data) {
+        DBObject object = (DBObject) JSON.parse(data);
+        productDatabase.getCollection(COLLECTION_NAME).save(object);
     }
 }

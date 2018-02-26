@@ -29,46 +29,36 @@ public class ProductService {
 
         ProductResponseDTO responseDTO = new ProductResponseDTO();
 
-        // 1) Get product name from external API
-        //      - If none exists, NoSuchElementException --> 404 Not Found
+        // Get product name from external API
         String productName = getProductName(id);
         responseDTO.setName(productName);
 
-        // 2) Get product price from NoSQL database
-        //      - If none exists, NoSuchElement --> 404 Not Found
+        // Get product price from NoSQL database
         ProductPriceDTO productPriceDTO = dao.getProductPrice(id);
 
-        // 3) Combine product name and price to create ProductResponseDTO
+        // Combine product name and price
         responseDTO.setId(productPriceDTO.getId());
         responseDTO.setPrice(productPriceDTO.getPrice());
 
-        // 4) Return to rest layer
+        // Return response object to rest layer
         return responseDTO;
     }
 
-    public void putProductPrice(String payload) {
-        ProductPriceDTO productPriceDTO;
-        try {
-            productPriceDTO = new ObjectMapper().readValue(payload, ProductPriceDTO.class);
-        } catch (IOException e) {
-            LOG.error("Error deserializing request payload for write. " +
-                    "\n\n Payload=" + payload + "\n\n" + e.getMessage());
-            throw new IllegalArgumentException("JSON input is invalid.");
-        }
+    public void putProductPrice(String payload) throws IOException {
+        ProductPriceDTO productPriceDTO = new ObjectMapper().readValue(payload, ProductPriceDTO.class);
         dao.saveProductPrices(productPriceDTO);
     }
 
-    private String getProductName(String id) { // TODO: Try/Catch and null check here is ugly
+    private String getProductName(String id) {
         HttpResponse<JsonNode> jsonResponse;
         try{
            jsonResponse = Unirest.get(buildRequest(id)).asJson();
         } catch (UnirestException e) {
             LOG.error("External HTTP GET request failed: " + buildRequest(id));
-            throw new IllegalStateException("Unable to make HTTP GET request to " + buildRequest(id));        //TODO: Manage exceptions / Map to HTTP codes
+            throw new IllegalStateException("Unable to make HTTP GET request to " + buildRequest(id));
         }
-        LOG.info("External HTTP GET request to " + buildRequest(id) + " succeeded. Payload=" + jsonResponse.getBody().toString());
 
-        verifyResponse(jsonResponse);
+        verifyResponse(jsonResponse, id);
         return getProductTitleFromJson(jsonResponse);
     }
 
@@ -76,9 +66,9 @@ public class ProductService {
         return EXTERNAL_PRODUCT_RESOURCE + id + EXTERNAL_PRODUCT_QUERY;
     }
 
-    private void verifyResponse(HttpResponse<JsonNode> jsonResponse) {
+    private void verifyResponse(HttpResponse<JsonNode> jsonResponse, String id) {
         JSONObject item = getItemFromJson(jsonResponse);
-        if (item.length() == 0) throw new NoSuchElementException();
+        if (item.length() == 0) throw new NoSuchElementException("No product exists for ID: " + id);
     }
 
     private JSONObject getItemFromJson(HttpResponse<JsonNode> jsonResponse) {

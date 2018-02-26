@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType
 import static javax.ws.rs.core.Response.Status.*
 
 
-class ProductResourceIntegration extends Specification {
+class ProductResourcePUTIntegration extends Specification {
 
     def host = "http://localhost:8080/myRetail/api/products/"
     def mongoDBHelper = MongoDBUtility.INSTANCE
@@ -82,6 +82,17 @@ class ProductResourceIntegration extends Specification {
         response.status == BAD_REQUEST.statusCode
         response.body.contains(String.valueOf(idParam))
         response.body.contains(String.valueOf(idPaylaod))
+    }
+
+    def "Test put product price - empty payload"() {
+        when:
+        HttpResponse response = Unirest.put(host + "12345678")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .body("")
+                .asString()
+
+        then:
+        response.status == BAD_REQUEST.statusCode
     }
 
     def "Test put product price - invalid json format"() {
