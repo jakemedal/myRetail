@@ -21,13 +21,14 @@ public class ProductResource {
 	@GET
 	@Path("/{productId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProduct(@PathParam("productId") String productId) throws IOException {
+	public Response getProduct(@PathParam("productId") String productId) {
 		LOG.info("HTTP GET /products - productId=" + productId);
 
 		ProductResponseDTO responseDTO = service.getProduct(productId);
+		String responseJson = validateResponseAsJson(responseDTO);
 
 		return status(OK)
-				.entity(new ObjectMapper().writeValueAsString(responseDTO))
+				.entity(responseJson)
 				.build();
 	}
 
@@ -50,6 +51,19 @@ public class ProductResource {
 					"PathParam: " + productId +
 					"Payload: " + getId(payload));
 		}
+	}
+
+	private String validateResponseAsJson(ProductResponseDTO responseDTO) {
+
+		String json;
+		try {
+			json = new ObjectMapper().writeValueAsString(responseDTO);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IllegalStateException("Serialization error: server side data is malformed.");
+		}
+
+		return json;
 	}
 
 	private String getId(String payload) throws IOException {
