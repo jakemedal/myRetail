@@ -75,9 +75,23 @@ class ProductResourceGETIntegration extends Specification {
         response.body == '{"id":16696651,"name":"Beats Solo 2 Wireless - Blue","current_price":{"value":249.99,"currency_code":"USD"}}'
     }
 
-    def "Test get product that doesn't exist"() {
+    def "Test get product that doesn't exist in external API"() {
         given:
         def id = "12345678"
+
+        when:
+        HttpResponse response = Unirest.get(host + id)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .asString()
+
+        then:
+        response.status == NOT_FOUND.statusCode
+        response.body.contains(id)
+    }
+
+    def "Test get product that doesn't exist in data store"() {
+        given:
+        def id = "13860428"
 
         when:
         HttpResponse response = Unirest.get(host + id)

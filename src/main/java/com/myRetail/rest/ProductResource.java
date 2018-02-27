@@ -7,10 +7,6 @@ import java.io.IOException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myRetail.domain.ProductResponseDTO;
@@ -29,10 +25,9 @@ public class ProductResource {
 		LOG.info("HTTP GET /products - productId=" + productId);
 
 		ProductResponseDTO responseDTO = service.getProduct(productId);
-		String json = new ObjectMapper().writeValueAsString(responseDTO);
 
 		return status(OK)
-				.entity(json)
+				.entity(new ObjectMapper().writeValueAsString(responseDTO))
 				.build();
 	}
 
@@ -41,15 +36,15 @@ public class ProductResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateProductPrice(@PathParam("productId") String productId,
 									   String payload) throws IOException {
-		LOG.info("HTTP PUT /products test- productId=" + productId + " payload=" + payload);
+		LOG.info("HTTP PUT /products test - productId=" + productId + " payload=" + payload);
 
-		verifyRequest(productId, payload);
+		validateRequest(productId, payload);
 		service.putProductPrice(payload);
 
 		return status(CREATED).build();
 	}
 
-	private void verifyRequest(String productId, String payload) throws IOException {
+	private void validateRequest(String productId, String payload) throws IOException {
 		if (!getId(payload).equals(productId)) {
 			throw new IllegalArgumentException("ID provided as path parameter does not match the ID in the payload\n\n" +
 					"PathParam: " + productId +

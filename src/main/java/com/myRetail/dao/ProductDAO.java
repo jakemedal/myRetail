@@ -1,6 +1,7 @@
 package com.myRetail.dao;
 
 import java.net.UnknownHostException;
+import java.util.NoSuchElementException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
@@ -39,6 +40,12 @@ public class ProductDAO {
     public ProductPriceDTO getProductPrice(String id) {
         DBObject result = products.findOne(new BasicDBObject("_id", Long.parseLong(id)));
 
+        if (result == null) {
+            // Should this be a client error (404) or server error (500)?
+            throw new NoSuchElementException("No product price information found for ID: " + id);
+        }
+
+        // Fetch _id as id to match payload requirements
         result.put("id", id);
         result.removeField("_id");
 
