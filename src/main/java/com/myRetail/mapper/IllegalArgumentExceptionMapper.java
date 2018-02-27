@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 @Provider
 public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
-    private static final Logger LOG = Logger.getLogger(IllegalArgumentException.class);
+    private static final Logger LOG = Logger.getLogger(IllegalArgumentExceptionMapper.class);
 
     @Override
     public Response toResponse(IllegalArgumentException exception) {

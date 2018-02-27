@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 @Provider
 public class NoSuchElementExceptionMapper implements ExceptionMapper<NoSuchElementException> {
-    private static final Logger LOG = Logger.getLogger(IllegalArgumentException.class);
+    private static final Logger LOG = Logger.getLogger(NoSuchElementExceptionMapper.class);
 
     @Override
     public Response toResponse(NoSuchElementException exception) {

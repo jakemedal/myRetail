@@ -12,7 +12,7 @@ import org.codehaus.jettison.json.JSONException;
 
 @Provider
 public class JSONExceptionMapper implements ExceptionMapper<JSONException> {
-    private static final Logger LOG = Logger.getLogger(IllegalArgumentException.class);
+    private static final Logger LOG = Logger.getLogger(JSONExceptionMapper.class);
 
     @Override
     public Response toResponse(JSONException exception) {
