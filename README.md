@@ -5,11 +5,11 @@ myRetail is a RESTful web service that can retrieve product details by product I
 ### API Reference
 ----
 
-**Request**
+* **Request**
   
   `GET /myRetail/api/products/{productId}`
   
-**URL Params**
+* **URL Params**
 
   *Required:*
   `productId=[integer]`
@@ -17,15 +17,15 @@ myRetail is a RESTful web service that can retrieve product details by product I
   *Optional:*
   None
 
-**Data Params**
+* **Data Params**
 
   None
   
-**Header Params**
+* **Header Params**
 
   None
 
-**Success Response:**
+* **Success Response:**
 
   *Code:* 200
   
@@ -34,7 +34,7 @@ myRetail is a RESTful web service that can retrieve product details by product I
   ```json
   {"id":13860428,"name":"The Big Lebowski (Blu-ray) (Widescreen)","current_price":{"value": 13.49,"currency_code":"USD"}}
   ```
-**Error Responses:**
+* **Error Responses:**
 
   *Code:* 404 <br />
   *Description:* No data was found for the provided `productId`
@@ -45,6 +45,6 @@ myRetail is a RESTful web service that can retrieve product details by product I
   *Code:* 500 <br />
   *Description:* Server side error
 
-**Sample Call:**
+* **Sample Call:**
 
   `curl localhost:8080/myRetail/api/products/16696656`
