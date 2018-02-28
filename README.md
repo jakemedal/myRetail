@@ -28,6 +28,7 @@ myRetail is a RESTful web service that can retrieve product details by product I
 **Success Response:**
 
   *Code:* 200
+  
   *Content:*
   
   ```json
