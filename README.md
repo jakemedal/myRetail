@@ -2,6 +2,7 @@
 
 myRetail is a RESTful web service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored locally in a NoSQL document store.
 
+<!---
 ### API Reference
 ----
 
@@ -48,3 +49,5 @@ myRetail is a RESTful web service that can retrieve product details by product I
 * **Sample Call:**
 
   `curl localhost:8080/myRetail/api/products/16696656`
+  
+--->
