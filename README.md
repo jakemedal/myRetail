@@ -7,12 +7,12 @@ myRetail is a RESTful web service that can retrieve product details by product I
 
 **Request**
   
-  GET /myRetail/api/products/{productId}
+  `GET /myRetail/api/products/{productId}`
   
 **URL Params**
 
   *Required:*
-  `producId=[integer]`
+  `productId=[integer]`
 
   *Optional:*
   None
@@ -27,9 +27,9 @@ myRetail is a RESTful web service that can retrieve product details by product I
 
 **Success Response:**
 
-  *Code:* 200 <br />
+  *Code:* 200
   *Content:*
-    
+  
   ```json
   {"id":13860428,"name":"The Big Lebowski (Blu-ray) (Widescreen)","current_price":{"value": 13.49,"currency_code":"USD"}}
   ```
