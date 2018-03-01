@@ -8,6 +8,7 @@ To build and run this project, you will need to have installed the following:
   * Java
   * Gradle
   * Groovy
+  * Tomcat
   * MongoDB
   
   *SDKMAN!* is a software development kit manager **for unix based systems** that can be used to install the necessary items listed above. To install *SDKMAN!*, you can run the following curl command:
@@ -27,6 +28,10 @@ Follow the on screen instructions to complete the setup. Once the setup is compl
 **Groovy**
 
   `$ sdk install groovy`
+  
+**Tomcat**
+
+ `# TODO`
   
 **MongoDB**
 
