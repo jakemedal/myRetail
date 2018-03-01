@@ -1,6 +1,8 @@
 # myRetail
 
-myRetail is a RESTful web service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored locally in a NoSQL document store.
+myRetail is a RESTful web service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored in a database maintained by the application. 
+
+The code is written in Java, built using Gradle, tested using the Spock Framework (Groovy), deployed to a Tomcat server, and stores data in a MongoDB document store.
 
 ### Setup
 
@@ -40,9 +42,32 @@ Follow the on screen instructions to complete the setup. Once the setup is compl
   Follow the [installation instructions](https://docs.mongodb.com/manual/administration/install-on-linux/) according to your operating system.
   
   
+### Build
+
+To build the war file that will live on the Tomcat server:
+
+`$ ./gradlew clean build`
+
+### Deploy
+
+If you haven't already, update CATALINA_HOME to point to your Tomcat installation.
+
+To deploy the war you just built:
+
+`$ ./deploy.sh`
+
+### Start MongoDB
+
+To start MongoDB:
+
+`$ mongod`
 
 
+### Test
 
+To run the integration tests against your newly deployed app:
+
+`$ ./gradlew clean integrationTest`
 
 
 
