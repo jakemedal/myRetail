@@ -124,6 +124,7 @@ class ProductResourcePUTIntegration extends Specification {
     }
 
     def buildJsonPut(long id, double price, String currency) {
+        // {"id":$id, "current_price":{"value": $price, "currency_code":"$currency"}}
         return "{\"id\":$id,\"current_price\":{\"value\": $price,\"currency_code\":\"$currency\"}}"
     }
 }

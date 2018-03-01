@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 public class ProductService {
-    private ProductDAO dao = new ProductDAO();
+    private ProductDAO dao;
 
     private static final Logger LOG = Logger.getLogger(ProductService.class);
     private static final String EXTERNAL_PRODUCT_RESOURCE = "http://redsky.target.com/v2/pdp/tcin/";
@@ -24,6 +24,14 @@ public class ProductService {
                                                          "rating_and_review_reviews,rating_and_review_statistics," +
                                                          "question_answer_statistics,deep_red_labels," +
                                                          "available_to_promise_network";
+
+    public ProductService() {
+        this(new ProductDAO());
+    }
+
+    public ProductService(ProductDAO dao) {
+        this.dao = dao;
+    }
 
     public ProductResponseDTO getProduct(String id) {
 
@@ -44,9 +52,36 @@ public class ProductService {
         return responseDTO;
     }
 
-    public void putProductPrice(String payload) throws IOException {
-        ProductPriceDTO productPriceDTO = new ObjectMapper().readValue(payload, ProductPriceDTO.class);
+    public void putProductPrice(String id, String payload) {
+        validateRequest(id, payload);
+
+        ProductPriceDTO productPriceDTO;
+        try {
+            productPriceDTO = new ObjectMapper().readValue(payload, ProductPriceDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("");
+        }
         dao.saveProductPrices(productPriceDTO);
+    }
+
+    private void validateRequest(String productId, String payload) {
+        if (!getId(payload).equals(productId)) {
+            throw new IllegalArgumentException("ID provided as path parameter does not match the ID in the payload\n\n" +
+                    "PathParam: " + productId +
+                    "Payload: " + getId(payload));
+        }
+    }
+
+    private String getId(String payload) {
+        com.fasterxml.jackson.databind.JsonNode json;
+        try {
+            json = new ObjectMapper().readTree(payload);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Unable to parse payload.");
+        }
+        return json.get("id").asText();
     }
 
     private String getProductName(String id) {
@@ -68,7 +103,7 @@ public class ProductService {
 
     private void verifyResponse(HttpResponse<JsonNode> jsonResponse, String id) {
         JSONObject item = getItemFromJson(jsonResponse);
-        if (item.length() == 0) throw new NoSuchElementException("No product exists for ID: " + id);
+        if (item.length() == 0) throw new NoSuchElementException("No product title information exists for ID: " + id);
     }
 
     private JSONObject getItemFromJson(HttpResponse<JsonNode> jsonResponse) {

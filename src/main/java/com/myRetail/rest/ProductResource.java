@@ -25,7 +25,7 @@ public class ProductResource {
 		LOG.info("HTTP GET /products - productId=" + productId);
 
 		ProductResponseDTO responseDTO = service.getProduct(productId);
-		String responseJson = validateResponseAsJson(responseDTO);
+		String responseJson = convertToJson(responseDTO);
 
 		return status(OK)
 				.entity(responseJson)
@@ -36,25 +36,14 @@ public class ProductResource {
 	@Path("/{productId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateProductPrice(@PathParam("productId") String productId,
-									   String payload) throws IOException {
+									   String payload) {
 		LOG.info("HTTP PUT /products test - productId=" + productId + " payload=" + payload);
 
-		validateRequest(productId, payload);
-		service.putProductPrice(payload);
-
+		service.putProductPrice(productId, payload);
 		return status(CREATED).build();
 	}
 
-	private void validateRequest(String productId, String payload) throws IOException {
-		if (!getId(payload).equals(productId)) {
-			throw new IllegalArgumentException("ID provided as path parameter does not match the ID in the payload\n\n" +
-					"PathParam: " + productId +
-					"Payload: " + getId(payload));
-		}
-	}
-
-	private String validateResponseAsJson(ProductResponseDTO responseDTO) {
-
+	private String convertToJson(ProductResponseDTO responseDTO) {
 		String json;
 		try {
 			json = new ObjectMapper().writeValueAsString(responseDTO);
@@ -62,13 +51,8 @@ public class ProductResource {
 			e.printStackTrace();
 			throw new IllegalStateException("Serialization error: server side data is malformed.");
 		}
-
 		return json;
 	}
 
-	private String getId(String payload) throws IOException {
-		JsonNode json =  new ObjectMapper().readTree(payload);
-		return json.get("id").asText();
-	}
 
 }
