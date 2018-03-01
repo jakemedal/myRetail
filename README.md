@@ -31,7 +31,9 @@ Follow the on screen instructions to complete the setup. Once the setup is compl
   
 **Tomcat**
 
- `# TODO`
+ Tomcat can be downloaded from the [Apache Tomcat website](https://tomcat.apache.org/index.html). If you are unfamiliar with Tomcat, you can follow the official [Tomcat 9 documentation](https://tomcat.apache.org/tomcat-9.0-doc/index.html).
+ 
+ You must update myRetail's [deploy.sh](./deploy.sh) script to point CATALINA_HOME to your installation of tomcat.
   
 **MongoDB**
 
