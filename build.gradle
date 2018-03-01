@@ -10,6 +10,11 @@ repositories {
     mavenCentral()
 }
 
+test {
+    description = "Runs unit Tests"
+    exclude '**/integration/**'
+}
+
 dependencies {
 	compile "javax.ws.rs:jsr311-api:1.1.1"
 
@@ -29,6 +34,10 @@ dependencies {
 	testCompile('junit:junit:4.12')
 	testCompile('org.codehaus.groovy:groovy-all:2.4.4')
 	testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
+}
+
+task integrationTest( type: Test ) {
+    description = "Runs Integration Tests"
 }
 
 task wrapper(type: Wrapper) {
