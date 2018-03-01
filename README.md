@@ -50,8 +50,6 @@ To build the war file that will live on the Tomcat server:
 
 ### Deploy
 
-If you haven't already, update CATALINA_HOME to point to your Tomcat installation.
-
 To deploy the war you just built:
 
 `$ ./deploy.sh`
