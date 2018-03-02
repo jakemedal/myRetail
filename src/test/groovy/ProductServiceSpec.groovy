@@ -7,7 +7,7 @@ import com.myRetail.service.ProductService
 import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
+@Ignore("Work in progress")
 class ProductServiceSpec extends Specification {
 
     ProductDAO dao = Mock(ProductDAO)
