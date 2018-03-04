@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 public class ProductDAO {
     private static final Logger LOG = Logger.getLogger(ProductDAO.class);
 
+    // TODO: Move to properties file
     private static final String MONGO_HOST = "localhost";
     private static final int MONGO_PORT = 27017;
     private static final String DB_NAME = "myRetail";
