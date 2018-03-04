@@ -43,8 +43,6 @@ public class ProductService {
 
         // Get product price from NoSQL database
         ProductPriceDTO productPriceDTO = dao.getProductPrice(id);
-
-        // Combine product name and price
         responseDTO.setId(productPriceDTO.getId());
         responseDTO.setPrice(productPriceDTO.getPrice());
 
@@ -106,12 +104,12 @@ public class ProductService {
         if (item.length() == 0) throw new NoSuchElementException("No product title information exists for ID: " + id);
     }
 
-    private JSONObject getItemFromJson(HttpResponse<JsonNode> jsonResponse) {
-        return jsonResponse.getBody().getObject().getJSONObject("product").getJSONObject("item");
-    }
-
     private String getProductTitleFromJson(HttpResponse<JsonNode> jsonResponse) {
         return getItemFromJson(jsonResponse).getJSONObject("product_description").getString("title");
+    }
+    
+    private JSONObject getItemFromJson(HttpResponse<JsonNode> jsonResponse) {
+        return jsonResponse.getBody().getObject().getJSONObject("product").getJSONObject("item");
     }
 
 }
