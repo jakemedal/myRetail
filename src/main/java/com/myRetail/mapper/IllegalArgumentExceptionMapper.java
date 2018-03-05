@@ -14,7 +14,7 @@ public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalAr
 
     @Override
     public Response toResponse(IllegalArgumentException exception) {
-        LOG.error(exception.getMessage(), exception);
+        LOG.info(exception.getMessage(), exception);
 
         return Response.status(BAD_REQUEST)
                 .entity(exception.getMessage())

@@ -15,7 +15,7 @@ public class IOExceptionMapper implements ExceptionMapper<IOException> {
     private static final Logger LOG = Logger.getLogger(IOExceptionMapper.class);
     @Override
     public Response toResponse(IOException exception) {
-        LOG.error(exception.getMessage(), exception);
+        LOG.info(exception.getMessage(), exception);
 
         return Response.status(BAD_REQUEST)
                 .entity(exception.getMessage())

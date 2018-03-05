@@ -15,7 +15,7 @@ public class NoSuchElementExceptionMapper implements ExceptionMapper<NoSuchEleme
 
     @Override
     public Response toResponse(NoSuchElementException exception) {
-        LOG.error(exception.getMessage(), exception);
+        LOG.info(exception.getMessage(), exception);
 
         return Response.status(NOT_FOUND)
                 .entity(exception.getMessage())
