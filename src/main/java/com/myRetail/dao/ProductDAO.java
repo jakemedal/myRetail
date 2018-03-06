@@ -52,7 +52,7 @@ public class ProductDAO {
 
         ProductPriceDTO productPriceDTO;
         try {
-            productPriceDTO =  new ObjectMapper().readValue(JSON.serialize(result), ProductPriceDTO.class);
+            productPriceDTO = new ObjectMapper().readValue(JSON.serialize(result), ProductPriceDTO.class);
         } catch (Exception e) {
             LOG.error("Error deserializing request payload for read: " + e.getMessage());
             throw new IllegalStateException("Database  is in a bad state: unable to deserialize document.");

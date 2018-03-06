@@ -54,5 +54,4 @@ public class ProductResource {
 		return json;
 	}
 
-
 }

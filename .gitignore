@@ -1,0 +1,27 @@
+# Project related
+.classpath
+.project
+.metadata
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Build related
+bin/**
+build
+
+*.jar
+*.war
+*.ear
+
+*.log
+*.class

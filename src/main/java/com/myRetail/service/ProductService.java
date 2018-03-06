@@ -58,7 +58,7 @@ public class ProductService {
             productPriceDTO = new ObjectMapper().readValue(payload, ProductPriceDTO.class);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("");
+            throw new IllegalArgumentException("Unable to parse payload.");
         }
         dao.saveProductPrices(productPriceDTO);
     }
