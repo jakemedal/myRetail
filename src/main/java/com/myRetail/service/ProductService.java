@@ -1,8 +1,9 @@
 package com.myRetail.service;
 
-import com.myRetail.domain.ProductResponseDTO;
+import com.myRetail.domain.Product;
+import com.myRetail.domain.ProductPrice;
 
 public interface ProductService {
-    ProductResponseDTO getProduct(String id);
-    void putProductPrice(String id, String payload);
+    Product getProduct(String id);
+    void putProductPrice(ProductPrice productPrice);
 }

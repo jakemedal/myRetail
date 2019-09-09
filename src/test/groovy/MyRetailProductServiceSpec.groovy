@@ -2,7 +2,7 @@
 import com.myRetail.repository.MongoDBProductRepository
 import com.myRetail.repository.PriceDTO
 import com.myRetail.repository.ProductPriceDTO
-import com.myRetail.domain.ProductResponseDTO
+import com.myRetail.domain.Product
 import com.myRetail.service.MyRetailProductService
 import spock.lang.Ignore
 import spock.lang.Specification
@@ -23,7 +23,7 @@ class MyRetailProductServiceSpec extends Specification {
         ProductPriceDTO productPriceDTO = new ProductPriceDTO(id as long, new PriceDTO(value, currency))
 
         when:
-        ProductResponseDTO responseDTO = service.getProduct(id)
+        Product responseDTO = service.getProduct(id)
 
         then:
         1 * service.getProductName(id) >> productName

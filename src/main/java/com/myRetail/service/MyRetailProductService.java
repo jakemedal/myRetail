@@ -1,16 +1,16 @@
 package com.myRetail.service;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.myRetail.domain.Price;
+import com.myRetail.domain.ProductPrice;
 import com.myRetail.repository.MongoDBProductRepository;
+import com.myRetail.repository.PriceDTO;
 import com.myRetail.repository.ProductPriceDTO;
-import com.myRetail.domain.ProductResponseDTO;
+import com.myRetail.domain.Product;
 import com.myRetail.repository.ProductRepository;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -33,59 +33,35 @@ public class MyRetailProductService implements ProductService {
         this.productRepository = mongoDBProductRepository;
     }
 
-    public ProductResponseDTO getProduct(String id) {
-
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
+    public Product getProduct(String id) {
+        Product product = new Product();
 
         // Get product name from external API
         String productName = getProductName(id);
-        responseDTO.setName(productName);
+        product.setName(productName);
 
         // Get product price from NoSQL database
         ProductPriceDTO productPriceDTO = productRepository.getProductPriceById(id);
-        responseDTO.setId(productPriceDTO.getId());
-        responseDTO.setPrice(productPriceDTO.getPrice());
 
-        // Return response object to rest layer
-        return responseDTO;
+        // Set properties on product
+        product.setId(productPriceDTO.getId());
+        PriceDTO priceDTO = productPriceDTO.getPrice();
+        product.setPrice(new Price(priceDTO.getValue(), priceDTO.getCurrency_code()));
+
+        // Return product to controller layer
+        return product;
     }
 
-    public void putProductPrice(String id, String payload) {
-        validateRequest(id, payload);
+    public void putProductPrice(ProductPrice productPrice) {
+        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
+        productPriceDTO.setId(productPrice.getId());
 
-        ProductPriceDTO productPriceDTO;
-        productPriceDTO = deserializeProductPriceInformation(payload);
+        PriceDTO priceDTO = new PriceDTO();
+        priceDTO.setValue(productPrice.getPrice().getValue());
+        priceDTO.setCurrency_code(productPrice.getPrice().getCurrencyCode());
+        productPriceDTO.setPrice(priceDTO);
+
         productRepository.save(productPriceDTO);
-    }
-
-    private void validateRequest(String productId, String payload) {
-        if (!getId(payload).equals(productId)) {
-            throw new IllegalArgumentException("ID provided as path parameter does not match the ID in the payload\n\n" +
-                                                       "PathParam: " + productId +
-                                                       "Payload: " + getId(payload));
-        }
-    }
-
-    private ProductPriceDTO deserializeProductPriceInformation(String payload) {
-        ProductPriceDTO productPriceDTO;
-        try {
-            productPriceDTO = new ObjectMapper().readValue(payload, ProductPriceDTO.class);
-        } catch (IOException e) {
-            LOG.error("An error occurred while deserializing product price information:  " + e.getMessage());
-            throw new IllegalArgumentException("Unable to parse payload.");
-        }
-        return productPriceDTO;
-    }
-
-    private String getId(String payload) {
-        com.fasterxml.jackson.databind.JsonNode json;
-        try {
-            json = new ObjectMapper().readTree(payload);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("Unable to parse payload.");
-        }
-        return json.get("id").asText();
     }
 
     private String getProductName(String id) {
