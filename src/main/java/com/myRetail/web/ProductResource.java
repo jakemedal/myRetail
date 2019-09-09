@@ -1,9 +1,9 @@
-package com.myRetail.rest;
+package com.myRetail.web;
 
 import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myRetail.domain.ProductResponseDTO;
-import com.myRetail.service.IProductService;
+import com.myRetail.service.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.*;
 class ProductResource {
 	private static final Logger LOG = Logger.getLogger(ProductResource.class);
 
-	private final IProductService productService;
+	private final ProductService productService;
 
 	@Autowired
-	public ProductResource(IProductService productService){
+	public ProductResource(ProductService productService){
 	    this.productService = productService;
     }
 
-	@GetMapping(value = "/products/{productId}",
-                produces = MediaType.APPLICATION_JSON_VALUE)
-	public HttpEntity<String> getProduct(@PathVariable("productId") String productId) {
+	@GetMapping(value = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public HttpEntity<String> getProduct(@PathVariable("productId") String productId) {
 		LOG.info("HTTP GET /products - productId=" + productId);
 
 		ProductResponseDTO responseDTO = productService.getProduct(productId);
@@ -33,11 +33,10 @@ class ProductResource {
 		return new HttpEntity<>(responseJson);
 	}
 
-	@PutMapping(value = "/products/{productId}",
-                consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/products/{productId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
 	public HttpEntity updateProductPrice(@PathVariable("productId") String productId,
-									   String payload) {
+                                         @RequestBody String payload) {
 		LOG.info("HTTP PUT /products test - productId=" + productId + " payload=" + payload);
 
         productService.putProductPrice(productId, payload);

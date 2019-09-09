@@ -1,17 +1,17 @@
 
-import com.myRetail.repository.ProductRepository
+import com.myRetail.repository.MongoDBProductRepository
 import com.myRetail.repository.PriceDTO
 import com.myRetail.repository.ProductPriceDTO
 import com.myRetail.domain.ProductResponseDTO
-import com.myRetail.service.ProductService
+import com.myRetail.service.MyRetailProductService
 import spock.lang.Ignore
 import spock.lang.Specification
 
 @Ignore("Work in progress")
-class ProductServiceSpec extends Specification {
+class MyRetailProductServiceSpec extends Specification {
 
-    ProductRepository dao = Mock(ProductRepository)
-    ProductService service = new ProductService(dao)
+    MongoDBProductRepository dao = Mock(MongoDBProductRepository)
+    MyRetailProductService service = new MyRetailProductService(dao)
 
     def "Test get product"() {
         given:

@@ -27,12 +27,12 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
                 .asString()
 
         then:
-        response.status == CREATED.statusCode
+        response.status == HttpStatus.CREATED.value()
     }
 
     def "Test put product price - update existing price"() {
@@ -56,7 +56,7 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse responseUpdate = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(jsonUpdate)
                 .asString()
 
@@ -72,7 +72,7 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + idParam)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(json)
                 .asString()
 
@@ -85,12 +85,12 @@ class ProductResourcePUTIntegration extends Specification {
     def "Test put product price - empty payload"() {
         when:
         HttpResponse response = Unirest.put(host + "12345678")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body("")
                 .asString()
 
         then:
-        response.status == BAD_REQUEST.statusCode
+        response.status == HttpStatus.BAD_REQUEST.value()
     }
 
     def "Test put product price - invalid json format"() {
@@ -100,7 +100,7 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(badJson)
                 .asString()
 
@@ -111,7 +111,7 @@ class ProductResourcePUTIntegration extends Specification {
     def "Test put product price - invalid media type"() {
         when:
         HttpResponse response = Unirest.put(host + "12345678")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE)
                 .body("")
                 .asString()
 
@@ -120,7 +120,6 @@ class ProductResourcePUTIntegration extends Specification {
     }
 
     def buildJsonPut(long id, double price, String currency) {
-        // {"id":$id, "current_price":{"value": $price, "currency_code":"$currency"}}
         return "{\"id\":$id,\"current_price\":{\"value\": $price,\"currency_code\":\"$currency\"}}"
     }
 }

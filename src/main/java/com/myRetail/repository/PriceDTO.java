@@ -1,8 +1,10 @@
 package com.myRetail.repository;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Data
 @Document
 public class PriceDTO {
     @Field("value")
@@ -10,18 +12,4 @@ public class PriceDTO {
 
     @Field("currency_code")
     private String currency_code;
-
-    public PriceDTO(double value, String currency) {
-        this.value = value;
-        this.currency_code = currency;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public String getCurrency() {
-        return currency_code;
-    }
-
 }

@@ -26,7 +26,7 @@ class ProductResourceGETIntegration extends Specification {
 
         testId1 = 13860429
         testId2 = 13860432
-        testId3 = 16696651
+        testId3 = 13860428
         testProduct1 = "{\"_id\":$testId1,\"current_price\":{\"value\":7.50,\"currency_code\":\"USD\"}}"
         testProduct2 = "{\"_id\":$testId2,\"current_price\":{\"value\":27.59,\"currency_code\":\"USD\"}}"
         testProduct3 = "{\"_id\":$testId3,\"current_price\":{\"value\":249.99,\"currency_code\":\"USD\"}}"
@@ -57,7 +57,7 @@ class ProductResourceGETIntegration extends Specification {
 
         then:
         response.status == HttpStatus.OK.value()
-        response.body == '{"id":13860432,"name":"Donna reed show season 4 (Lost episod (DVD)","current_price":{"value":27.59,"currency_code":"USD"}}'
+        response.body == '{"id":13860432,"name":"The Donna Reed Show: Season Four, The Lost Episodes (DVD)","current_price":{"value":27.59,"currency_code":"USD"}}'
     }
 
     def "Test get product 3"() {
@@ -71,7 +71,7 @@ class ProductResourceGETIntegration extends Specification {
 
         then:
         response.status == HttpStatus.OK.value()
-        response.body == '{"id":16696651,"name":"Beats Solo 2 Wireless - Blue","current_price":{"value":249.99,"currency_code":"USD"}}'
+        response.body == '{"id":13860428,"name":"The Big Lebowski (Blu-ray)","current_price":{"value":249.99,"currency_code":"USD"}}'
     }
 
     def "Test get product that doesn't exist in external API"() {
