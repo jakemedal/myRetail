@@ -2,15 +2,11 @@ package integration
 
 import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
-
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import spock.lang.Specification
 import util.MongoDBUtility
-
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MediaType
-
-import static javax.ws.rs.core.Response.Status.*
-
 
 class ProductResourcePUTIntegration extends Specification {
 
@@ -31,7 +27,7 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body(json)
                 .asString()
 
@@ -51,21 +47,21 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body(json)
                 .asString()
 
         then:
-        response.status == CREATED.statusCode
+        response.status == HttpStatus.CREATED.value()
 
         when:
         HttpResponse responseUpdate = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body(jsonUpdate)
                 .asString()
 
         then:
-        responseUpdate.status == CREATED.statusCode
+        responseUpdate.status == HttpStatus.CREATED.value()
     }
 
     def "Test put product price - mismatching IDs"() {
@@ -76,12 +72,12 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + idParam)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body(json)
                 .asString()
 
         then:
-        response.status == BAD_REQUEST.statusCode
+        response.status == HttpStatus.BAD_REQUEST.value()
         response.body.contains(String.valueOf(idParam))
         response.body.contains(String.valueOf(idPaylaod))
     }
@@ -89,7 +85,7 @@ class ProductResourcePUTIntegration extends Specification {
     def "Test put product price - empty payload"() {
         when:
         HttpResponse response = Unirest.put(host + "12345678")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body("")
                 .asString()
 
@@ -104,23 +100,23 @@ class ProductResourcePUTIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.put(host + id)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body(badJson)
                 .asString()
 
         then:
-        response.status == BAD_REQUEST.statusCode
+        response.status == HttpStatus.BAD_REQUEST.value()
     }
 
     def "Test put product price - invalid media type"() {
         when:
         HttpResponse response = Unirest.put(host + "12345678")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString())
                 .body("")
                 .asString()
 
         then:
-        response.status == UNSUPPORTED_MEDIA_TYPE.statusCode
+        response.status == HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()
     }
 
     def buildJsonPut(long id, double price, String currency) {

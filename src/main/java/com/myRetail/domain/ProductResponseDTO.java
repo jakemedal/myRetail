@@ -2,6 +2,7 @@ package com.myRetail.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myRetail.repository.PriceDTO;
 
 public class ProductResponseDTO {
 

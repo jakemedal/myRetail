@@ -1,7 +1,7 @@
 
-import com.myRetail.dao.ProductDAO
-import com.myRetail.domain.PriceDTO
-import com.myRetail.domain.ProductPriceDTO
+import com.myRetail.repository.ProductRepository
+import com.myRetail.repository.PriceDTO
+import com.myRetail.repository.ProductPriceDTO
 import com.myRetail.domain.ProductResponseDTO
 import com.myRetail.service.ProductService
 import spock.lang.Ignore
@@ -10,7 +10,7 @@ import spock.lang.Specification
 @Ignore("Work in progress")
 class ProductServiceSpec extends Specification {
 
-    ProductDAO dao = Mock(ProductDAO)
+    ProductRepository dao = Mock(ProductRepository)
     ProductService service = new ProductService(dao)
 
     def "Test get product"() {

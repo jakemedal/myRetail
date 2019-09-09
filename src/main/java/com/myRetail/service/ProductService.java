@@ -1,6 +1,5 @@
 package com.myRetail.service;
 
-
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
@@ -9,14 +8,17 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.myRetail.dao.ProductDAO;
-import com.myRetail.domain.ProductPriceDTO;
+import com.myRetail.repository.ProductRepository;
+import com.myRetail.repository.ProductPriceDTO;
 import com.myRetail.domain.ProductResponseDTO;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class ProductService {
-    private ProductDAO dao;
+@Service
+public class ProductService implements IProductService {
+    private ProductRepository productRepository;
 
     private static final Logger LOG = Logger.getLogger(ProductService.class);
     private static final String EXTERNAL_PRODUCT_RESOURCE = "http://redsky.target.com/v2/pdp/tcin/";
@@ -25,12 +27,9 @@ public class ProductService {
                                                          "question_answer_statistics,deep_red_labels," +
                                                          "available_to_promise_network";
 
-    public ProductService() {
-        this(new ProductDAO());
-    }
-
-    public ProductService(ProductDAO dao) {
-        this.dao = dao;
+    @Autowired
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     public ProductResponseDTO getProduct(String id) {
@@ -42,9 +41,9 @@ public class ProductService {
         responseDTO.setName(productName);
 
         // Get product price from NoSQL database
-        ProductPriceDTO productPriceDTO = dao.getProductPrice(id);
+        ProductPriceDTO productPriceDTO = productRepository.getProductPriceById(id);
         responseDTO.setId(productPriceDTO.getId());
-        responseDTO.setPrice(productPriceDTO.getPrice());
+        responseDTO.setPrice(productPriceDTO.getPriceDto());
 
         // Return response object to rest layer
         return responseDTO;
@@ -60,7 +59,7 @@ public class ProductService {
             e.printStackTrace();
             throw new IllegalArgumentException("Unable to parse payload.");
         }
-        dao.saveProductPrices(productPriceDTO);
+        productRepository.save(productPriceDTO);
     }
 
     private void validateRequest(String productId, String payload) {

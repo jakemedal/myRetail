@@ -1,46 +1,47 @@
 package com.myRetail.rest;
 
-import static javax.ws.rs.core.Response.Status.*;
-import static javax.ws.rs.core.Response.status;
-
 import java.io.IOException;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myRetail.domain.ProductResponseDTO;
-import com.myRetail.service.ProductService;
+import com.myRetail.service.IProductService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-@Path("/products")
-public class ProductResource {
+@RestController
+class ProductResource {
 	private static final Logger LOG = Logger.getLogger(ProductResource.class);
-	private final ProductService service = new ProductService();
 
-	@GET
-	@Path("/{productId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProduct(@PathParam("productId") String productId) {
+	private final IProductService productService;
+
+	@Autowired
+	public ProductResource(IProductService productService){
+	    this.productService = productService;
+    }
+
+	@GetMapping(value = "/products/{productId}",
+                produces = MediaType.APPLICATION_JSON_VALUE)
+	public HttpEntity<String> getProduct(@PathVariable("productId") String productId) {
 		LOG.info("HTTP GET /products - productId=" + productId);
 
-		ProductResponseDTO responseDTO = service.getProduct(productId);
+		ProductResponseDTO responseDTO = productService.getProduct(productId);
 		String responseJson = convertToJson(responseDTO);
 
-		return status(OK)
-				.entity(responseJson)
-				.build();
+		return new HttpEntity<>(responseJson);
 	}
 
-	@PUT
-	@Path("/{productId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateProductPrice(@PathParam("productId") String productId,
+	@PutMapping(value = "/products/{productId}",
+                consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+	public HttpEntity updateProductPrice(@PathVariable("productId") String productId,
 									   String payload) {
 		LOG.info("HTTP PUT /products test - productId=" + productId + " payload=" + payload);
 
-		service.putProductPrice(productId, payload);
-		return status(CREATED).build();
+        productService.putProductPrice(productId, payload);
+		return new HttpEntity<>(HttpStatus.CREATED);
 	}
 
 	private String convertToJson(ProductResponseDTO responseDTO) {

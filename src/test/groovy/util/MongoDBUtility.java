@@ -1,7 +1,5 @@
 package util;
 
-import java.net.UnknownHostException;
-
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
@@ -21,17 +19,11 @@ public class MongoDBUtility {
     private static DB productDatabase;
 
     private MongoDBUtility() {
-        MongoClient mongo = null;
-        try {
-            mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
-        } catch (UnknownHostException e) {
-            LOG.error("Unable to initialize MongoDB database.");
-            e.printStackTrace();
-        }
+        MongoClient mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
         productDatabase = mongo.getDB(DB_NAME);
     }
 
-    public void cleanUp() throws UnknownHostException {
+    public void cleanUp() {
         productDatabase.getCollection(COLLECTION_NAME).remove(new BasicDBObject());
     }
 

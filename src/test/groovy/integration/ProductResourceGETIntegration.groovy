@@ -2,15 +2,12 @@ package integration
 
 import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import spock.lang.Shared
 import spock.lang.Specification
 import util.MongoDBUtility
-
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.MediaType
-
-import static javax.ws.rs.core.Response.Status.*
-
 
 class ProductResourceGETIntegration extends Specification {
 
@@ -41,11 +38,11 @@ class ProductResourceGETIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.get(host + testId1)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .asString()
 
         then:
-        response.status == OK.statusCode
+        response.status == HttpStatus.OK.value()
         response.body == '{"id":13860429,"name":"SpongeBob SquarePants: SpongeBob\'s Frozen Face-off","current_price":{"value":7.5,"currency_code":"USD"}}'
     }
 
@@ -55,11 +52,11 @@ class ProductResourceGETIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.get(host + testId2)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .asString()
 
         then:
-        response.status == OK.statusCode
+        response.status == HttpStatus.OK.value()
         response.body == '{"id":13860432,"name":"Donna reed show season 4 (Lost episod (DVD)","current_price":{"value":27.59,"currency_code":"USD"}}'
     }
 
@@ -69,11 +66,11 @@ class ProductResourceGETIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.get(host + testId3)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .asString()
 
         then:
-        response.status == OK.statusCode
+        response.status == HttpStatus.OK.value()
         response.body == '{"id":16696651,"name":"Beats Solo 2 Wireless - Blue","current_price":{"value":249.99,"currency_code":"USD"}}'
     }
 
@@ -83,11 +80,11 @@ class ProductResourceGETIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.get(host + id)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .asString()
 
         then:
-        response.status == NOT_FOUND.statusCode
+        response.status == HttpStatus.NOT_FOUND.value()
         response.body.contains(id)
     }
 
@@ -97,22 +94,22 @@ class ProductResourceGETIntegration extends Specification {
 
         when:
         HttpResponse response = Unirest.get(host + id)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .asString()
 
         then:
-        response.status == NOT_FOUND.statusCode
+        response.status == HttpStatus.NOT_FOUND.value()
         response.body.contains(id)
     }
 
     def "Test get project - invalid media type"() {
         when:
         HttpResponse response = Unirest.get(host + 12345678)
-                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML_VALUE)
                 .asString()
 
         then:
-        response.status == NOT_ACCEPTABLE.statusCode
+        response.status == HttpStatus.NOT_ACCEPTABLE.value()
     }
 
 }
