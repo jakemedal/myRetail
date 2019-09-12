@@ -32,8 +32,7 @@ public class MongoDBProductRepository implements ProductRepository {
         ProductPriceDTO productPriceDTO = operations.findOne(query, ProductPriceDTO.class);
 
         if (productPriceDTO == null) {
-            // Should this be a client error (404) or server error (500)?
-            throw new NoSuchElementException("No product price information found for ID: " + id);
+            throw new ProductPriceNotFoundException("No product price information found for ID: " + id);
         }
 
         LOG.info("Returning productPriceDto=" + productPriceDTO);
