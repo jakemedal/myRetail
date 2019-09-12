@@ -1,8 +1,6 @@
 package com.myRetail.repository;
 
-import org.springframework.data.repository.Repository;
-
-public interface ProductRepository extends Repository<ProductPriceDTO, Long> {
+public interface ProductRepository {
     void save(ProductPriceDTO productPriceDTO);
     ProductPriceDTO getProductPriceById(String id);
 }
