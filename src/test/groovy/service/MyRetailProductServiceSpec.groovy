@@ -1,15 +1,16 @@
+package service
 
-import com.myRetail.repository.PriceDTO
-import com.myRetail.repository.ProductPriceDTO
+import com.myRetail.domain.Price
+import com.myRetail.domain.ProductPrice
 import com.myRetail.domain.Product
-import com.myRetail.repository.ProductRepository
+import com.myRetail.repository.ProductPriceDao
 import com.myRetail.service.MyRetailProductService
 import com.myRetail.service.ProductNameClient
 import spock.lang.Specification
 
 class MyRetailProductServiceSpec extends Specification {
 
-    ProductRepository dao = Mock(ProductRepository)
+    ProductPriceDao dao = Mock(ProductPriceDao)
     ProductNameClient client = Mock(ProductNameClient)
     MyRetailProductService service = new MyRetailProductService(dao, client)
 
@@ -20,20 +21,15 @@ class MyRetailProductServiceSpec extends Specification {
         double value = 12.50
         def currency = "USD"
 
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO()
-        productPriceDTO.setId(id as long)
-
-        PriceDTO price = new PriceDTO()
-        price.setValue(value)
-        price.setCurrency_code(currency)
-        productPriceDTO.setPrice(price)
+        Price price = new Price(value, currency)
+        ProductPrice productPrice = new ProductPrice(id as long, price)
 
         when:
         Product responseDTO = service.getProduct(id)
 
         then:
         1 * client.getProductName(id) >> productName
-        1 * dao.getProductPriceById(id) >> productPriceDTO
+        1 * dao.get(id) >> Optional.of(productPrice)
 
         assert responseDTO.id == id as long
         assert responseDTO.name == productName

@@ -2,10 +2,9 @@ package com.myRetail.service;
 
 import com.myRetail.domain.Price;
 import com.myRetail.domain.ProductPrice;
-import com.myRetail.repository.PriceDTO;
-import com.myRetail.repository.ProductPriceDTO;
 import com.myRetail.domain.Product;
-import com.myRetail.repository.ProductRepository;
+import com.myRetail.repository.ProductPriceDao;
+import com.myRetail.repository.exception.ProductPriceNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MyRetailProductService implements ProductService {
 
-    private ProductRepository productRepository;
+    private ProductPriceDao productPriceDao;
     private ProductNameClient productNameClient;
 
     @Autowired
-    public MyRetailProductService(ProductRepository productRepository, ProductNameClient productNameClient) {
-        this.productRepository = productRepository;
+    public MyRetailProductService(ProductPriceDao productPriceDao, ProductNameClient productNameClient) {
+        this.productPriceDao = productPriceDao;
         this.productNameClient = productNameClient;
     }
 
@@ -31,27 +30,21 @@ public class MyRetailProductService implements ProductService {
         product.setName(productName);
 
         // Get product price from database
-        ProductPriceDTO productPriceDTO = productRepository.getProductPriceById(id);
+        ProductPrice productPrice = productPriceDao.get(id)
+                                                   .orElseThrow(() -> new ProductPriceNotFoundException(
+                                                           "No Product Price information is available for ID: " + id)
+                                                   );
 
         // Set properties on product
-        log.info("Got here with productPriceDTO: " + productPriceDTO);
-        product.setId(productPriceDTO.getId());
-        PriceDTO priceDTO = productPriceDTO.getPrice();
-        product.setPrice(new Price(priceDTO.getValue(), priceDTO.getCurrency_code()));
+        product.setId(productPrice.getId());
+        Price price = productPrice.getPrice();
+        product.setPrice(new Price(price.getValue(), price.getCurrencyCode()));
 
         return product;
     }
 
     public void putProductPrice(ProductPrice productPrice) {
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setId(productPrice.getId());
-
-        PriceDTO priceDTO = new PriceDTO();
-        priceDTO.setValue(productPrice.getPrice().getValue());
-        priceDTO.setCurrency_code(productPrice.getPrice().getCurrencyCode());
-        productPriceDTO.setPrice(priceDTO);
-
-        productRepository.save(productPriceDTO);
+        productPriceDao.save(productPrice);
     }
 
 }
