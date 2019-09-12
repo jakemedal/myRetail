@@ -1,6 +1,8 @@
 package com.myRetail.mapper;
 
 import com.myRetail.repository.ProductPriceNotFoundException;
+import com.myRetail.service.ProductTitleNotFoundException;
+import com.myRetail.service.UnexpectedExternalApiException;
 import com.myRetail.web.NoProductPriceRequestBodyException;
 import com.myRetail.web.RequestPathParmaMismatchException;
 import org.apache.log4j.Logger;
@@ -24,12 +26,12 @@ public class RestResponseEntityExceptionMapper {
         return buildResponse(HttpStatus.BAD_REQUEST, ex);
     }
 
-    @ExceptionHandler({NoSuchElementException.class, ProductPriceNotFoundException.class})
+    @ExceptionHandler({ProductTitleNotFoundException.class, ProductPriceNotFoundException.class})
     public ResponseEntity<String> handleNotFoundException(Exception ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex);
     }
 
-    @ExceptionHandler({IllegalStateException.class})
+    @ExceptionHandler({IllegalStateException.class, UnexpectedExternalApiException.class})
     public ResponseEntity<String> handleInternalServerErrorException(Exception ex) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex);
     }
