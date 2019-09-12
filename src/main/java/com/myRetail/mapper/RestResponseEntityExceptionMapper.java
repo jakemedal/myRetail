@@ -5,17 +5,16 @@ import com.myRetail.service.exception.ProductTitleNotFoundException;
 import com.myRetail.service.exception.UnexpectedExternalApiException;
 import com.myRetail.web.exception.NoProductPriceRequestBodyException;
 import com.myRetail.web.exception.RequestPathParmaMismatchException;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import java.io.IOException;
 
+@Log4j2
 @ControllerAdvice
 public class RestResponseEntityExceptionMapper {
-    private static final Logger LOG = Logger.getLogger(RestResponseEntityExceptionMapper.class);
 
     @ExceptionHandler({IllegalArgumentException.class,
                        IOException.class,
@@ -36,7 +35,7 @@ public class RestResponseEntityExceptionMapper {
     }
 
     private ResponseEntity<String> buildResponse(HttpStatus status, Exception ex) {
-        LOG.error("Exception was mapped: status={}, message={}", ex);
+        log.error("Exception was mapped: status={}, message={}", status, ex);
         return new ResponseEntity<>(ex.getMessage(), status);
     }
 }

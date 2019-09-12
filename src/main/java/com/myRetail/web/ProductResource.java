@@ -5,16 +5,16 @@ import com.myRetail.domain.ProductPrice;
 import com.myRetail.service.ProductService;
 import com.myRetail.web.exception.NoProductPriceRequestBodyException;
 import com.myRetail.web.exception.RequestPathParmaMismatchException;
-import org.apache.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+@Log4j2
 @RestController
 class ProductResource {
-	private static final Logger LOG = Logger.getLogger(ProductResource.class);
 
 	private final ProductService productService;
 
@@ -25,7 +25,7 @@ class ProductResource {
 
 	@GetMapping(value = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Product getProduct(@PathVariable("productId") String productId) {
-		LOG.info("HTTP GET /products - productId=" + productId);
+		log.info("HTTP GET /products - productId=" + productId);
 		return productService.getProduct(productId);
 	}
 
@@ -33,7 +33,7 @@ class ProductResource {
     @ResponseStatus(HttpStatus.CREATED)
 	public HttpEntity updateProductPrice(@PathVariable("productId") String productId,
                                          @RequestBody ProductPrice productPrice) {
-		LOG.info("HTTP PUT /products test - productId=" + productId + " payload=" + productPrice);
+		log.info("HTTP PUT /products test - productId=" + productId + " payload=" + productPrice);
 		validateRequest(productId, productPrice);
 		productService.putProductPrice(productPrice);
 		return new HttpEntity<>(HttpStatus.CREATED);
