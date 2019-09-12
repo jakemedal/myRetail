@@ -1,6 +1,5 @@
 package com.myRetail.service;
 
-import java.util.NoSuchElementException;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -12,6 +11,8 @@ import com.myRetail.repository.PriceDTO;
 import com.myRetail.repository.ProductPriceDTO;
 import com.myRetail.domain.Product;
 import com.myRetail.repository.ProductRepository;
+import com.myRetail.service.exception.ProductTitleNotFoundException;
+import com.myRetail.service.exception.UnexpectedExternalApiException;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

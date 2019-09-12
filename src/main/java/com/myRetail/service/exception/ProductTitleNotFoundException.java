@@ -1,7 +1,7 @@
-package com.myRetail.service;
+package com.myRetail.service.exception;
 
 public class ProductTitleNotFoundException extends RuntimeException {
-    ProductTitleNotFoundException(String message) {
+    public ProductTitleNotFoundException(String message) {
         super(message);
     }
 }

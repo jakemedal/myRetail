@@ -1,7 +1,7 @@
-package com.myRetail.repository;
+package com.myRetail.repository.exception;
 
 public class ProductPriceNotFoundException extends RuntimeException {
-    ProductPriceNotFoundException(String message) {
+    public ProductPriceNotFoundException(String message) {
         super(message);
     }
 }

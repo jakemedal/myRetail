@@ -1,7 +1,7 @@
-package com.myRetail.web;
+package com.myRetail.web.exception;
 
 public class NoProductPriceRequestBodyException extends RuntimeException {
-    NoProductPriceRequestBodyException(String message) {
+    public NoProductPriceRequestBodyException(String message) {
         super(message);
     }
 }

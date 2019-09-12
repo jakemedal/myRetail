@@ -1,7 +1,7 @@
-package com.myRetail.service;
+package com.myRetail.service.exception;
 
 public class UnexpectedExternalApiException extends RuntimeException {
-    UnexpectedExternalApiException(String message) {
+    public UnexpectedExternalApiException(String message) {
         super(message);
     }
 }

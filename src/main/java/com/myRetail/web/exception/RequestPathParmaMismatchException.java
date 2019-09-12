@@ -1,7 +1,7 @@
-package com.myRetail.web;
+package com.myRetail.web.exception;
 
 public class RequestPathParmaMismatchException extends RuntimeException {
-    RequestPathParmaMismatchException(String message) {
+    public RequestPathParmaMismatchException(String message) {
         super(message);
     }
 }

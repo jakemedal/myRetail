@@ -1,10 +1,10 @@
 package com.myRetail.mapper;
 
-import com.myRetail.repository.ProductPriceNotFoundException;
-import com.myRetail.service.ProductTitleNotFoundException;
-import com.myRetail.service.UnexpectedExternalApiException;
-import com.myRetail.web.NoProductPriceRequestBodyException;
-import com.myRetail.web.RequestPathParmaMismatchException;
+import com.myRetail.repository.exception.ProductPriceNotFoundException;
+import com.myRetail.service.exception.ProductTitleNotFoundException;
+import com.myRetail.service.exception.UnexpectedExternalApiException;
+import com.myRetail.web.exception.NoProductPriceRequestBodyException;
+import com.myRetail.web.exception.RequestPathParmaMismatchException;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionMapper {
