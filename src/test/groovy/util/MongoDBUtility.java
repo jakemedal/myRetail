@@ -5,10 +5,9 @@ import com.mongodb.DB;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
-import org.apache.log4j.Logger;
 
+// TODO: Update deprecated method calls
 public class MongoDBUtility {
-    private static final Logger LOG = Logger.getLogger(MongoDBUtility.class);
 
     public static final MongoDBUtility INSTANCE = new MongoDBUtility();
 
