@@ -1,17 +1,17 @@
 
-import com.myRetail.repository.MongoDBProductRepository
 import com.myRetail.repository.PriceDTO
 import com.myRetail.repository.ProductPriceDTO
 import com.myRetail.domain.Product
+import com.myRetail.repository.ProductRepository
 import com.myRetail.service.MyRetailProductService
-import spock.lang.Ignore
+import com.myRetail.service.ProductNameClient
 import spock.lang.Specification
 
-@Ignore("Work in progress")
 class MyRetailProductServiceSpec extends Specification {
 
-    MongoDBProductRepository dao = Mock(MongoDBProductRepository)
-    MyRetailProductService service = new MyRetailProductService(dao)
+    ProductRepository dao = Mock(ProductRepository)
+    ProductNameClient client = Mock(ProductNameClient)
+    MyRetailProductService service = new MyRetailProductService(dao, client)
 
     def "Test get product"() {
         given:
@@ -20,18 +20,24 @@ class MyRetailProductServiceSpec extends Specification {
         double value = 12.50
         def currency = "USD"
 
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO(id as long, new PriceDTO(value, currency))
+        ProductPriceDTO productPriceDTO = new ProductPriceDTO()
+        productPriceDTO.setId(id as long)
+
+        PriceDTO price = new PriceDTO()
+        price.setValue(value)
+        price.setCurrency_code(currency)
+        productPriceDTO.setPrice(price)
 
         when:
         Product responseDTO = service.getProduct(id)
 
         then:
-        1 * service.getProductName(id) >> productName
-        1 * dao.getProductPrice(id) >> productPriceDTO
+        1 * client.getProductName(id) >> productName
+        1 * dao.getProductPriceById(id) >> productPriceDTO
 
         assert responseDTO.id == id as long
         assert responseDTO.name == productName
         assert responseDTO.price.value == value
-        assert responseDTO.price.currency == currency
+        assert responseDTO.price.currencyCode == currency
     }
 }
