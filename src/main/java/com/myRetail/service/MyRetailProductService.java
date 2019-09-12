@@ -48,7 +48,6 @@ public class MyRetailProductService implements ProductService {
         PriceDTO priceDTO = productPriceDTO.getPrice();
         product.setPrice(new Price(priceDTO.getValue(), priceDTO.getCurrency_code()));
 
-        // Return product to controller layer
         return product;
     }
 
