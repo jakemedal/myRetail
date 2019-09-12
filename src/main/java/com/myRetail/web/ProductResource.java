@@ -22,9 +22,7 @@ class ProductResource {
     }
 
 	@GetMapping(value = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    Product getProduct(@PathVariable("productId") String productId) {
+    public @ResponseBody Product getProduct(@PathVariable("productId") String productId) {
 		LOG.info("HTTP GET /products - productId=" + productId);
 		return productService.getProduct(productId);
 	}
@@ -41,11 +39,17 @@ class ProductResource {
 
     private void validateRequest(String productId, ProductPrice product) {
 	    if (!productId.equals(String.valueOf(product.getId()))) {
-	        // TODO: Map this exception!
 	        throw new RequestPathParmaMismatchException(
-	                "The ID provided in the path does not match the ID provided in the payload."
+	                "The ID provided in the path (" + productId + ")" +
+                            " does not match the ID provided in the payload (" + product.getId() + ")."
+            );
+        }
+
+	    // TODO: try to make this check using a custom HttpMesageConverter
+	    if (product.getPrice() == null) {
+	        throw new NoProductPriceRequestBodyException(
+	                "No Product Price information was provided in the request body."
             );
         }
     }
-
 }
