@@ -15,6 +15,7 @@ import com.myRetail.repository.ProductRepository;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -68,8 +69,7 @@ public class MyRetailProductService implements ProductService {
         try{
            jsonResponse = Unirest.get(buildRequest(id)).asJson();
         } catch (UnirestException e) {
-            LOG.error("External HTTP GET request failed: " + buildRequest(id));
-            throw new IllegalStateException("Unable to make HTTP GET request to " + buildRequest(id));
+            throw new UnexpectedExternalApiException("Unable to make HTTP GET request to " + buildRequest(id));
         }
 
         verifyResponse(jsonResponse, id);
@@ -81,8 +81,20 @@ public class MyRetailProductService implements ProductService {
     }
 
     private void verifyResponse(HttpResponse<JsonNode> jsonResponse, String id) {
-        JSONObject item = getItemFromJson(jsonResponse);
-        if (item.length() == 0) throw new NoSuchElementException("No product title information exists for ID: " + id);
+        if (isNotFound(jsonResponse)) {
+            throw new ProductTitleNotFoundException("No product title information exists for ID: " + id);
+        }
+
+        if (jsonResponse.getStatus() != HttpStatus.OK.value()) {
+            throw new UnexpectedExternalApiException(
+                    "Unable to retrieve data from an external API. Response code: " + jsonResponse.getStatus()
+            );
+        }
+    }
+
+    private boolean isNotFound(HttpResponse<JsonNode> jsonResponse) {
+        return jsonResponse.getStatus() == HttpStatus.NOT_FOUND.value() ||
+                getItemFromJson(jsonResponse).length() == 0;
     }
 
     private String getProductTitleFromJson(HttpResponse<JsonNode> jsonResponse) {
