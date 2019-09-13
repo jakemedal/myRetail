@@ -4,12 +4,14 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.myRetail.service.exception.ProductTitleNotFoundException;
+import com.myRetail.service.exception.ProductNameNotFoundException;
 import com.myRetail.service.exception.UnexpectedExternalApiException;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -21,7 +23,7 @@ public class RedSkyClient implements ProductNameClient {
             "available_to_promise_network";
 
     @Override
-    public String getProductName(String id) {
+    public Optional<String> getProductName(String id) {
         HttpResponse<JsonNode> jsonResponse;
         try{
             jsonResponse = Unirest.get(buildRequest(id)).asJson();
@@ -30,7 +32,7 @@ public class RedSkyClient implements ProductNameClient {
         }
 
         verifyResponse(jsonResponse, id);
-        return getProductTitleFromJson(jsonResponse);
+        return Optional.of(getProductTitleFromJson(jsonResponse));
     }
 
     private String buildRequest(String id) {
@@ -39,7 +41,7 @@ public class RedSkyClient implements ProductNameClient {
 
     private void verifyResponse(HttpResponse<JsonNode> jsonResponse, String id) {
         if (isNotFound(jsonResponse)) {
-            throw new ProductTitleNotFoundException("No product title information exists for ID: " + id);
+            throw new ProductNameNotFoundException("No product title information exists for ID: " + id);
         }
 
         if (jsonResponse.getStatus() != HttpStatus.OK.value()) {

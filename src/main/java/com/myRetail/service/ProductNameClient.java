@@ -1,5 +1,7 @@
 package com.myRetail.service;
 
+import java.util.Optional;
+
 public interface ProductNameClient {
-    String getProductName(String id);
+    Optional<String> getProductName(String id);
 }
