@@ -14,11 +14,6 @@ repositories {
     mavenCentral()
 }
 
-test {
-    description = "Runs unit Tests"
-    exclude '**/integration/**'
-}
-
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:2.1.2.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-tomcat:2.1.6.RELEASE'
@@ -30,15 +25,22 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
 
-	testCompile 'junit:junit:4.12'
+    testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE'
+    testCompile 'junit:junit:4.12'
 	testCompile 'org.codehaus.groovy:groovy-all:2.4.4'
 	testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testCompile 'org.objenesis:objenesis:1.4'
     testCompile 'cglib:cglib-nodep:2.2'
 }
 
+test {
+    description = "Runs unit Tests"
+    exclude '**/integration/**'
+}
+
 task integrationTest( type: Test ) {
     description = "Runs Integration Tests"
+    exclude '**/unit/**'
 }
 
 task wrapper(type: Wrapper) {
