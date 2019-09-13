@@ -1,6 +1,6 @@
 # myRetail
 
-myRetail is a RESTful web service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored in a database maintained by the application. 
+myRetail is a RESTful web unit.service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored in a database maintained by the application. 
 
 The code is written in Java, built using Gradle, tested using the Spock Framework (Groovy), deployed to a Tomcat server, and stores data in a MongoDB document store.
 
@@ -54,6 +54,8 @@ To deploy the war you just built:
 
 `$ ./deploy.sh`
 
+Or, if using the `springify` branch, use `./gradlew bootRun` instead.
+
 ### Start MongoDB
 
 To start MongoDB:
@@ -62,8 +64,11 @@ To start MongoDB:
 
 
 ### Test
+Unit tests will be run as a part of the gradle build task, but to run them separately you can use:
 
-To run the integration tests against your newly deployed app:
+`$ ./gradlew clean test`
+
+To run the integration tests against the currently deployed app:
 
 `$ ./gradlew clean integrationTest`
 
