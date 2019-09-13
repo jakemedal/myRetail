@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
+@RequestMapping
 class ProductResource {
 
 	private final ProductService productService;
@@ -24,6 +25,7 @@ class ProductResource {
     }
 
 	@GetMapping(value = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Product getProduct(@PathVariable("productId") String productId) {
 		log.info("HTTP GET /products - productId=" + productId);
 		return productService.getProduct(productId);

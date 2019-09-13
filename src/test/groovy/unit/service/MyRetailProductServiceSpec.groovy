@@ -1,4 +1,4 @@
-package service
+package unit.service
 
 import com.myRetail.domain.Price
 import com.myRetail.domain.ProductPrice
@@ -10,7 +10,6 @@ import com.myRetail.service.ProductService
 import com.myRetail.service.exception.ProductNameNotFoundException
 import com.myRetail.service.exception.ProductPriceNotFoundException
 import spock.lang.Specification
-import spock.lang.Unroll
 
 class MyRetailProductServiceSpec extends Specification {
 
@@ -33,7 +32,7 @@ class MyRetailProductServiceSpec extends Specification {
         Product response = service.getProduct(id)
 
         then:
-        1 * client.getProductName(id) >> productName
+        1 * client.getProductName(id) >> Optional.of(productName)
         1 * dao.get(id) >> Optional.of(productPrice)
 
         assert response.id == id as long

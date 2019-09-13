@@ -1,4 +1,4 @@
-package util;
+package integration.util;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;

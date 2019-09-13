@@ -2,12 +2,12 @@ package integration
 
 import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
+import integration.util.MongoDBUtility
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import spock.lang.Shared
 import spock.lang.Specification
-import util.MongoDBUtility
 
 class ProductResourceGETIntegration extends Specification {
 
