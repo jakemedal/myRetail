@@ -1,7 +1,7 @@
 package com.myRetail.mapper;
 
-import com.myRetail.repository.exception.ProductPriceNotFoundException;
-import com.myRetail.service.exception.ProductTitleNotFoundException;
+import com.myRetail.service.exception.ProductPriceNotFoundException;
+import com.myRetail.service.exception.ProductNameNotFoundException;
 import com.myRetail.service.exception.UnexpectedExternalApiException;
 import com.myRetail.web.exception.NoProductPriceRequestBodyException;
 import com.myRetail.web.exception.RequestPathParmaMismatchException;
@@ -24,7 +24,7 @@ public class RestResponseEntityExceptionMapper {
         return buildResponse(HttpStatus.BAD_REQUEST, ex);
     }
 
-    @ExceptionHandler({ProductTitleNotFoundException.class, ProductPriceNotFoundException.class})
+    @ExceptionHandler({ProductNameNotFoundException.class, ProductPriceNotFoundException.class})
     public ResponseEntity<String> handleNotFoundException(Exception ex) {
         return buildResponse(HttpStatus.NOT_FOUND, ex);
     }

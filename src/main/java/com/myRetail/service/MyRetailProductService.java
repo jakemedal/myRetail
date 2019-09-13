@@ -4,7 +4,8 @@ import com.myRetail.domain.Price;
 import com.myRetail.domain.ProductPrice;
 import com.myRetail.domain.Product;
 import com.myRetail.repository.ProductPriceDao;
-import com.myRetail.repository.exception.ProductPriceNotFoundException;
+import com.myRetail.service.exception.ProductPriceNotFoundException;
+import com.myRetail.service.exception.ProductNameNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +27,17 @@ public class MyRetailProductService implements ProductService {
         Product product = new Product();
 
         // Get product name using external API client
-        String productName = productNameClient.getProductName(id);
+        String productName = productNameClient.getProductName(id)
+                                              .orElseThrow(() -> new ProductNameNotFoundException(
+                                                      "No product title information is available for ID: " + id
+                                               ));
         product.setName(productName);
 
         // Get product price from database
         ProductPrice productPrice = productPriceDao.get(id)
                                                    .orElseThrow(() -> new ProductPriceNotFoundException(
-                                                           "No Product Price information is available for ID: " + id)
-                                                   );
+                                                           "No product price information is available for ID: " + id
+                                                    ));
 
         // Set properties on product
         product.setId(productPrice.getId());
