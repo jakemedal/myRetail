@@ -1,6 +1,6 @@
 # myRetail
 
-myRetail is a RESTful web unit.service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored in a database maintained by the application. 
+myRetail is a RESTful web service that can retrieve product details by product ID, and update product price information. Product title information is retrieved from an external REST API, and product price information is stored in a database maintained by the application. 
 
 The code is written in Java, built using Gradle, tested using the Spock Framework (Groovy), deployed to a Tomcat server, and stores data in a MongoDB document store.
 
